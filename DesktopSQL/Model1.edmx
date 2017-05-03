@@ -1,0 +1,775 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SklepMuzycznyV2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Gatunek">
+          <Key>
+            <PropertyRef Name="Ga_ID" />
+          </Key>
+          <Property Name="Ga_ID" Type="int" Nullable="false" />
+          <Property Name="Ga_Gatunek" Type="varchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="Kl_ID" />
+          </Key>
+          <Property Name="Kl_ID" Type="int" Nullable="false" />
+          <Property Name="Kl_Imie" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Kl_Nazwisko" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Kl_Pesel" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="Kl_Mail" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Kl_Adres" Type="varchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ListaTowarow">
+          <Key>
+            <PropertyRef Name="Za_ID" />
+            <PropertyRef Name="To_ID" />
+          </Key>
+          <Property Name="Za_ID" Type="int" Nullable="false" />
+          <Property Name="To_ID" Type="int" Nullable="false" />
+          <Property Name="Li_IloscTowaru" Type="int" Nullable="false" />
+          <Property Name="Li_Cena_Zakupu" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pracownicy">
+          <Key>
+            <PropertyRef Name="Pr_ID" />
+          </Key>
+          <Property Name="Pr_ID" Type="int" Nullable="false" />
+          <Property Name="Pr_Imie" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Pr_Nazwisko" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Pr_AdresPracy" Type="varchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Towar">
+          <Key>
+            <PropertyRef Name="To_ID" />
+          </Key>
+          <Property Name="To_ID" Type="int" Nullable="false" />
+          <Property Name="Ga_ID" Type="int" Nullable="false" />
+          <Property Name="Ty_ID" Type="int" Nullable="false" />
+          <Property Name="To_CenaAktualna" Type="money" Nullable="false" />
+          <Property Name="To_IloscNaStanie" Type="int" Nullable="false" />
+          <Property Name="To_Nazwa" Type="varchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TowarWykonawca">
+          <Key>
+            <PropertyRef Name="To_ID" />
+            <PropertyRef Name="Wy_ID" />
+          </Key>
+          <Property Name="To_ID" Type="int" Nullable="false" />
+          <Property Name="Wy_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Typ">
+          <Key>
+            <PropertyRef Name="Ty_ID" />
+          </Key>
+          <Property Name="Ty_ID" Type="int" Nullable="false" />
+          <Property Name="Ty_Typ" Type="varchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Utwor">
+          <Key>
+            <PropertyRef Name="Ut_ID" />
+          </Key>
+          <Property Name="Ut_ID" Type="int" Nullable="false" />
+          <Property Name="To_ID" Type="int" Nullable="false" />
+          <Property Name="Ut_Name" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Ut_CzasUtworu" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Wykonawca">
+          <Key>
+            <PropertyRef Name="Wy_ID" />
+          </Key>
+          <Property Name="Wy_ID" Type="int" Nullable="false" />
+          <Property Name="Wy_Imie" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Wy_Nazwisko" Type="varchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Zamowienia">
+          <Key>
+            <PropertyRef Name="Za_ID" />
+          </Key>
+          <Property Name="Za_ID" Type="int" Nullable="false" />
+          <Property Name="Pr_ID" Type="int" Nullable="false" />
+          <Property Name="Kl_ID" Type="int" Nullable="false" />
+          <Property Name="Za_NaKiedy" Type="datetime" Nullable="false" />
+          <Property Name="Za_KiedyKupione" Type="datetime" Nullable="false" />
+          <Property Name="Za_CzyZrealizowano" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LISTATOW_LISTATOWA_TOWAR">
+          <End Role="Towar" Type="Self.Towar" Multiplicity="1" />
+          <End Role="ListaTowarow" Type="Self.ListaTowarow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Towar">
+              <PropertyRef Name="To_ID" />
+            </Principal>
+            <Dependent Role="ListaTowarow">
+              <PropertyRef Name="To_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LISTATOW_LISTATOWA_ZAMOWIEN">
+          <End Role="Zamowienia" Type="Self.Zamowienia" Multiplicity="1" />
+          <End Role="ListaTowarow" Type="Self.ListaTowarow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zamowienia">
+              <PropertyRef Name="Za_ID" />
+            </Principal>
+            <Dependent Role="ListaTowarow">
+              <PropertyRef Name="Za_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TOWAR_TOWARGATU_GATUNEK">
+          <End Role="Gatunek" Type="Self.Gatunek" Multiplicity="1" />
+          <End Role="Towar" Type="Self.Towar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gatunek">
+              <PropertyRef Name="Ga_ID" />
+            </Principal>
+            <Dependent Role="Towar">
+              <PropertyRef Name="Ga_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TOWAR_TOWARTYP_TYP">
+          <End Role="Typ" Type="Self.Typ" Multiplicity="1" />
+          <End Role="Towar" Type="Self.Towar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typ">
+              <PropertyRef Name="Ty_ID" />
+            </Principal>
+            <Dependent Role="Towar">
+              <PropertyRef Name="Ty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TOWARWYK_TOWARWYKO_TOWAR">
+          <End Role="Towar" Type="Self.Towar" Multiplicity="1" />
+          <End Role="TowarWykonawca" Type="Self.TowarWykonawca" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Towar">
+              <PropertyRef Name="To_ID" />
+            </Principal>
+            <Dependent Role="TowarWykonawca">
+              <PropertyRef Name="To_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TOWARWYK_TOWARWYKO_WYKONAWC">
+          <End Role="Wykonawca" Type="Self.Wykonawca" Multiplicity="1" />
+          <End Role="TowarWykonawca" Type="Self.TowarWykonawca" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Wykonawca">
+              <PropertyRef Name="Wy_ID" />
+            </Principal>
+            <Dependent Role="TowarWykonawca">
+              <PropertyRef Name="Wy_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UTWOR_TOWARUTWO_TOWAR">
+          <End Role="Towar" Type="Self.Towar" Multiplicity="1" />
+          <End Role="Utwor" Type="Self.Utwor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Towar">
+              <PropertyRef Name="To_ID" />
+            </Principal>
+            <Dependent Role="Utwor">
+              <PropertyRef Name="To_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZAMOWIEN_RELATIONS_KLIENCI">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Zamowienia" Type="Self.Zamowienia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="Kl_ID" />
+            </Principal>
+            <Dependent Role="Zamowienia">
+              <PropertyRef Name="Kl_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZAMOWIEN_RELATIONS_PRACOWNI">
+          <End Role="Pracownicy" Type="Self.Pracownicy" Multiplicity="1" />
+          <End Role="Zamowienia" Type="Self.Zamowienia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pracownicy">
+              <PropertyRef Name="Pr_ID" />
+            </Principal>
+            <Dependent Role="Zamowienia">
+              <PropertyRef Name="Pr_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Zad1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad10" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad11" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad3" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad4" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad5" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad6" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad7" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad8" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Zad9" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="SklepMuzycznyV2ModelStoreContainer">
+          <EntitySet Name="Gatunek" EntityType="Self.Gatunek" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ListaTowarow" EntityType="Self.ListaTowarow" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pracownicy" EntityType="Self.Pracownicy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Towar" EntityType="Self.Towar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TowarWykonawca" EntityType="Self.TowarWykonawca" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Typ" EntityType="Self.Typ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Utwor" EntityType="Self.Utwor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Wykonawca" EntityType="Self.Wykonawca" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zamowienia" EntityType="Self.Zamowienia" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_LISTATOW_LISTATOWA_TOWAR" Association="Self.FK_LISTATOW_LISTATOWA_TOWAR">
+            <End Role="Towar" EntitySet="Towar" />
+            <End Role="ListaTowarow" EntitySet="ListaTowarow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LISTATOW_LISTATOWA_ZAMOWIEN" Association="Self.FK_LISTATOW_LISTATOWA_ZAMOWIEN">
+            <End Role="Zamowienia" EntitySet="Zamowienia" />
+            <End Role="ListaTowarow" EntitySet="ListaTowarow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TOWAR_TOWARGATU_GATUNEK" Association="Self.FK_TOWAR_TOWARGATU_GATUNEK">
+            <End Role="Gatunek" EntitySet="Gatunek" />
+            <End Role="Towar" EntitySet="Towar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TOWAR_TOWARTYP_TYP" Association="Self.FK_TOWAR_TOWARTYP_TYP">
+            <End Role="Typ" EntitySet="Typ" />
+            <End Role="Towar" EntitySet="Towar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TOWARWYK_TOWARWYKO_TOWAR" Association="Self.FK_TOWARWYK_TOWARWYKO_TOWAR">
+            <End Role="Towar" EntitySet="Towar" />
+            <End Role="TowarWykonawca" EntitySet="TowarWykonawca" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TOWARWYK_TOWARWYKO_WYKONAWC" Association="Self.FK_TOWARWYK_TOWARWYKO_WYKONAWC">
+            <End Role="Wykonawca" EntitySet="Wykonawca" />
+            <End Role="TowarWykonawca" EntitySet="TowarWykonawca" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UTWOR_TOWARUTWO_TOWAR" Association="Self.FK_UTWOR_TOWARUTWO_TOWAR">
+            <End Role="Towar" EntitySet="Towar" />
+            <End Role="Utwor" EntitySet="Utwor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZAMOWIEN_RELATIONS_KLIENCI" Association="Self.FK_ZAMOWIEN_RELATIONS_KLIENCI">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Zamowienia" EntitySet="Zamowienia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZAMOWIEN_RELATIONS_PRACOWNI" Association="Self.FK_ZAMOWIEN_RELATIONS_PRACOWNI">
+            <End Role="Pracownicy" EntitySet="Pracownicy" />
+            <End Role="Zamowienia" EntitySet="Zamowienia" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SklepMuzycznyV2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Gatunek">
+          <Key>
+            <PropertyRef Name="Ga_ID" />
+          </Key>
+          <Property Name="Ga_ID" Type="Int32" Nullable="false" />
+          <Property Name="Ga_Gatunek" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Towar" Relationship="Self.FK_TOWAR_TOWARGATU_GATUNEK" FromRole="Gatunek" ToRole="Towar" />
+        </EntityType>
+        <EntityType Name="Klienci">
+          <Key>
+            <PropertyRef Name="Kl_ID" />
+          </Key>
+          <Property Name="Kl_ID" Type="Int32" Nullable="false" />
+          <Property Name="Kl_Imie" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Kl_Nazwisko" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Kl_Pesel" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Kl_Mail" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Kl_Adres" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Zamowienia" Relationship="Self.FK_ZAMOWIEN_RELATIONS_KLIENCI" FromRole="Klienci" ToRole="Zamowienia" />
+        </EntityType>
+        <EntityType Name="ListaTowarow">
+          <Key>
+            <PropertyRef Name="Za_ID" />
+            <PropertyRef Name="To_ID" />
+          </Key>
+          <Property Name="Za_ID" Type="Int32" Nullable="false" />
+          <Property Name="To_ID" Type="Int32" Nullable="false" />
+          <Property Name="Li_IloscTowaru" Type="Int32" Nullable="false" />
+          <Property Name="Li_Cena_Zakupu" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Towar" Relationship="Self.FK_LISTATOW_LISTATOWA_TOWAR" FromRole="ListaTowarow" ToRole="Towar" />
+          <NavigationProperty Name="Zamowienia" Relationship="Self.FK_LISTATOW_LISTATOWA_ZAMOWIEN" FromRole="ListaTowarow" ToRole="Zamowienia" />
+        </EntityType>
+        <EntityType Name="Pracownicy">
+          <Key>
+            <PropertyRef Name="Pr_ID" />
+          </Key>
+          <Property Name="Pr_ID" Type="Int32" Nullable="false" />
+          <Property Name="Pr_Imie" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pr_Nazwisko" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pr_AdresPracy" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Zamowienia" Relationship="Self.FK_ZAMOWIEN_RELATIONS_PRACOWNI" FromRole="Pracownicy" ToRole="Zamowienia" />
+        </EntityType>
+        <EntityType Name="Towar">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Ga_ID" Type="Int32" Nullable="false" />
+          <Property Name="Ty_ID" Type="Int32" Nullable="false" />
+          <Property Name="CenaAktualna" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="IloscNaStanie" Type="Int32" Nullable="false" />
+          <Property Name="Nazwa" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Gatunek" Relationship="Self.FK_TOWAR_TOWARGATU_GATUNEK" FromRole="Towar" ToRole="Gatunek" />
+          <NavigationProperty Name="ListaTowarow" Relationship="Self.FK_LISTATOW_LISTATOWA_TOWAR" FromRole="Towar" ToRole="ListaTowarow" />
+          <NavigationProperty Name="Typ" Relationship="Self.FK_TOWAR_TOWARTYP_TYP" FromRole="Towar" ToRole="Typ" />
+          <NavigationProperty Name="Utwor" Relationship="Self.FK_UTWOR_TOWARUTWO_TOWAR" FromRole="Towar" ToRole="Utwor" />
+          <NavigationProperty Name="Wykonawca" Relationship="Self.TowarWykonawca" FromRole="Towar" ToRole="Wykonawca" />
+        </EntityType>
+        <EntityType Name="Typ">
+          <Key>
+            <PropertyRef Name="Ty_ID" />
+          </Key>
+          <Property Name="Ty_ID" Type="Int32" Nullable="false" />
+          <Property Name="Ty_Typ" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Towar" Relationship="Self.FK_TOWAR_TOWARTYP_TYP" FromRole="Typ" ToRole="Towar" />
+        </EntityType>
+        <EntityType Name="Utwor">
+          <Key>
+            <PropertyRef Name="Ut_ID" />
+          </Key>
+          <Property Name="Ut_ID" Type="Int32" Nullable="false" />
+          <Property Name="To_ID" Type="Int32" Nullable="false" />
+          <Property Name="Ut_Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Ut_CzasUtworu" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Towar" Relationship="Self.FK_UTWOR_TOWARUTWO_TOWAR" FromRole="Utwor" ToRole="Towar" />
+        </EntityType>
+        <EntityType Name="Wykonawca">
+          <Key>
+            <PropertyRef Name="Wy_ID" />
+          </Key>
+          <Property Name="Wy_ID" Type="Int32" Nullable="false" />
+          <Property Name="Wy_Imie" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Wy_Nazwisko" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Towar" Relationship="Self.TowarWykonawca" FromRole="Wykonawca" ToRole="Towar" />
+        </EntityType>
+        <EntityType Name="Zamowienia">
+          <Key>
+            <PropertyRef Name="Za_ID" />
+          </Key>
+          <Property Name="Za_ID" Type="Int32" Nullable="false" />
+          <Property Name="Pr_ID" Type="Int32" Nullable="false" />
+          <Property Name="Kl_ID" Type="Int32" Nullable="false" />
+          <Property Name="Za_NaKiedy" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Za_KiedyKupione" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Za_CzyZrealizowano" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Klienci" Relationship="Self.FK_ZAMOWIEN_RELATIONS_KLIENCI" FromRole="Zamowienia" ToRole="Klienci" />
+          <NavigationProperty Name="ListaTowarow" Relationship="Self.FK_LISTATOW_LISTATOWA_ZAMOWIEN" FromRole="Zamowienia" ToRole="ListaTowarow" />
+          <NavigationProperty Name="Pracownicy" Relationship="Self.FK_ZAMOWIEN_RELATIONS_PRACOWNI" FromRole="Zamowienia" ToRole="Pracownicy" />
+        </EntityType>
+        <Association Name="FK_TOWAR_TOWARGATU_GATUNEK">
+          <End Role="Gatunek" Type="Self.Gatunek" Multiplicity="1" />
+          <End Role="Towar" Type="Self.Towar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gatunek">
+              <PropertyRef Name="Ga_ID" />
+            </Principal>
+            <Dependent Role="Towar">
+              <PropertyRef Name="Ga_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZAMOWIEN_RELATIONS_KLIENCI">
+          <End Role="Klienci" Type="Self.Klienci" Multiplicity="1" />
+          <End Role="Zamowienia" Type="Self.Zamowienia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Klienci">
+              <PropertyRef Name="Kl_ID" />
+            </Principal>
+            <Dependent Role="Zamowienia">
+              <PropertyRef Name="Kl_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LISTATOW_LISTATOWA_TOWAR">
+          <End Role="Towar" Type="Self.Towar" Multiplicity="1" />
+          <End Role="ListaTowarow" Type="Self.ListaTowarow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Towar">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ListaTowarow">
+              <PropertyRef Name="To_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LISTATOW_LISTATOWA_ZAMOWIEN">
+          <End Role="Zamowienia" Type="Self.Zamowienia" Multiplicity="1" />
+          <End Role="ListaTowarow" Type="Self.ListaTowarow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zamowienia">
+              <PropertyRef Name="Za_ID" />
+            </Principal>
+            <Dependent Role="ListaTowarow">
+              <PropertyRef Name="Za_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZAMOWIEN_RELATIONS_PRACOWNI">
+          <End Role="Pracownicy" Type="Self.Pracownicy" Multiplicity="1" />
+          <End Role="Zamowienia" Type="Self.Zamowienia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pracownicy">
+              <PropertyRef Name="Pr_ID" />
+            </Principal>
+            <Dependent Role="Zamowienia">
+              <PropertyRef Name="Pr_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TOWAR_TOWARTYP_TYP">
+          <End Role="Typ" Type="Self.Typ" Multiplicity="1" />
+          <End Role="Towar" Type="Self.Towar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Typ">
+              <PropertyRef Name="Ty_ID" />
+            </Principal>
+            <Dependent Role="Towar">
+              <PropertyRef Name="Ty_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UTWOR_TOWARUTWO_TOWAR">
+          <End Role="Towar" Type="Self.Towar" Multiplicity="1" />
+          <End Role="Utwor" Type="Self.Utwor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Towar">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Utwor">
+              <PropertyRef Name="To_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TowarWykonawca">
+          <End Role="Towar" Type="Self.Towar" Multiplicity="*" />
+          <End Role="Wykonawca" Type="Self.Wykonawca" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SklepMuzycznyV2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Gatunek" EntityType="Self.Gatunek" />
+          <EntitySet Name="Klienci" EntityType="Self.Klienci" />
+          <EntitySet Name="ListaTowarow" EntityType="Self.ListaTowarow" />
+          <EntitySet Name="Pracownicy" EntityType="Self.Pracownicy" />
+          <EntitySet Name="Towar" EntityType="Self.Towar" />
+          <EntitySet Name="Typ" EntityType="Self.Typ" />
+          <EntitySet Name="Utwor" EntityType="Self.Utwor" />
+          <EntitySet Name="Wykonawca" EntityType="Self.Wykonawca" />
+          <EntitySet Name="Zamowienia" EntityType="Self.Zamowienia" />
+          <AssociationSet Name="FK_TOWAR_TOWARGATU_GATUNEK" Association="Self.FK_TOWAR_TOWARGATU_GATUNEK">
+            <End Role="Gatunek" EntitySet="Gatunek" />
+            <End Role="Towar" EntitySet="Towar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZAMOWIEN_RELATIONS_KLIENCI" Association="Self.FK_ZAMOWIEN_RELATIONS_KLIENCI">
+            <End Role="Klienci" EntitySet="Klienci" />
+            <End Role="Zamowienia" EntitySet="Zamowienia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LISTATOW_LISTATOWA_TOWAR" Association="Self.FK_LISTATOW_LISTATOWA_TOWAR">
+            <End Role="Towar" EntitySet="Towar" />
+            <End Role="ListaTowarow" EntitySet="ListaTowarow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LISTATOW_LISTATOWA_ZAMOWIEN" Association="Self.FK_LISTATOW_LISTATOWA_ZAMOWIEN">
+            <End Role="Zamowienia" EntitySet="Zamowienia" />
+            <End Role="ListaTowarow" EntitySet="ListaTowarow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZAMOWIEN_RELATIONS_PRACOWNI" Association="Self.FK_ZAMOWIEN_RELATIONS_PRACOWNI">
+            <End Role="Pracownicy" EntitySet="Pracownicy" />
+            <End Role="Zamowienia" EntitySet="Zamowienia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TOWAR_TOWARTYP_TYP" Association="Self.FK_TOWAR_TOWARTYP_TYP">
+            <End Role="Typ" EntitySet="Typ" />
+            <End Role="Towar" EntitySet="Towar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UTWOR_TOWARUTWO_TOWAR" Association="Self.FK_UTWOR_TOWARUTWO_TOWAR">
+            <End Role="Towar" EntitySet="Towar" />
+            <End Role="Utwor" EntitySet="Utwor" />
+          </AssociationSet>
+          <AssociationSet Name="TowarWykonawca" Association="Self.TowarWykonawca">
+            <End Role="Towar" EntitySet="Towar" />
+            <End Role="Wykonawca" EntitySet="Wykonawca" />
+          </AssociationSet>
+          <FunctionImport Name="Zad1" ReturnType="Collection(SklepMuzycznyV2Model.Zad1_Result)" />
+          <FunctionImport Name="Zad10" ReturnType="Collection(SklepMuzycznyV2Model.Zad10_Result)" />
+          <FunctionImport Name="Zad11" ReturnType="Collection(SklepMuzycznyV2Model.Zad11_Result)" />
+          <FunctionImport Name="Zad2" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="Zad3" ReturnType="Collection(SklepMuzycznyV2Model.Zad3_Result)" />
+          <FunctionImport Name="Zad4" ReturnType="Collection(SklepMuzycznyV2Model.Zad4_Result)" />
+          <FunctionImport Name="Zad5" ReturnType="Collection(SklepMuzycznyV2Model.Zad5_Result)" />
+          <FunctionImport Name="Zad6" ReturnType="Collection(SklepMuzycznyV2Model.Zad6_Result)" />
+          <FunctionImport Name="Zad7" ReturnType="Collection(SklepMuzycznyV2Model.Zad7_Result)" />
+          <FunctionImport Name="Zad8" ReturnType="Collection(SklepMuzycznyV2Model.Zad8_Result)" />
+          <FunctionImport Name="Zad9" ReturnType="Collection(SklepMuzycznyV2Model.Zad9_Result)" />
+        </EntityContainer>
+        <ComplexType Name="Zad1_Result">
+          <Property Type="String" Name="ImieKlienta" Nullable="false" MaxLength="1024" />
+          <Property Type="String" Name="NazwiskoKlienta" Nullable="false" MaxLength="1024" />
+          <Property Type="DateTime" Name="NaKiedyZamowiono" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="lacznyKoszt" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="Zad10_Result">
+          <Property Type="DateTime" Name="Za_NaKiedy" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="IloscZlecen" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Zad11_Result">
+          <Property Type="String" Name="Kl_Imie" Nullable="false" MaxLength="1024" />
+          <Property Type="Int32" Name="ileZamowien" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Zad3_Result">
+          <Property Type="String" Name="NazwaTowaru" Nullable="false" MaxLength="1024" />
+          <Property Type="Int32" Name="IloscTowaruWSklepie" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Zad4_Result">
+          <Property Type="String" Name="NazwaTowaru" Nullable="false" MaxLength="1024" />
+          <Property Type="Decimal" Name="CenaZaSztuke" Nullable="false" Precision="19" />
+          <Property Type="Int32" Name="ZakupionychSztuk" Nullable="false" />
+          <Property Type="DateTime" Name="Za_KiedyKupione" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Zad5_Result">
+          <Property Type="String" Name="NazwaTowaru" Nullable="false" MaxLength="1024" />
+          <Property Type="Int32" Name="brakującyTowar" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Zad6_Result">
+          <Property Type="String" Name="NazwaTowaru" Nullable="false" MaxLength="1024" />
+          <Property Type="Int32" Name="To_IloscNaStanie" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Zad7_Result">
+          <Property Type="String" Name="NazwaTowaru" Nullable="false" MaxLength="1024" />
+          <Property Type="Decimal" Name="CenaZaSztuke" Nullable="false" Precision="19" />
+          <Property Type="Int32" Name="IloscSztuk" Nullable="false" />
+          <Property Type="DateTime" Name="Za_KiedyKupione" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Zad8_Result">
+          <Property Type="String" Name="NazwaTowaru" Nullable="false" MaxLength="1024" />
+          <Property Type="Int32" Name="IloscNaMagazynie" Nullable="false" />
+          <Property Type="Int32" Name="IloscZamowionychDoTejPory" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Zad9_Result">
+          <Property Type="String" Name="Pr_Imie" Nullable="false" MaxLength="1024" />
+          <Property Type="Int32" Name="IloscZlecen" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SklepMuzycznyV2ModelStoreContainer" CdmEntityContainer="SklepMuzycznyV2Entities">
+          <EntitySetMapping Name="Gatunek">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Gatunek">
+              <MappingFragment StoreEntitySet="Gatunek">
+                <ScalarProperty Name="Ga_ID" ColumnName="Ga_ID" />
+                <ScalarProperty Name="Ga_Gatunek" ColumnName="Ga_Gatunek" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Klienci">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Klienci">
+              <MappingFragment StoreEntitySet="Klienci">
+                <ScalarProperty Name="Kl_ID" ColumnName="Kl_ID" />
+                <ScalarProperty Name="Kl_Imie" ColumnName="Kl_Imie" />
+                <ScalarProperty Name="Kl_Nazwisko" ColumnName="Kl_Nazwisko" />
+                <ScalarProperty Name="Kl_Pesel" ColumnName="Kl_Pesel" />
+                <ScalarProperty Name="Kl_Mail" ColumnName="Kl_Mail" />
+                <ScalarProperty Name="Kl_Adres" ColumnName="Kl_Adres" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListaTowarow">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.ListaTowarow">
+              <MappingFragment StoreEntitySet="ListaTowarow">
+                <ScalarProperty Name="Za_ID" ColumnName="Za_ID" />
+                <ScalarProperty Name="To_ID" ColumnName="To_ID" />
+                <ScalarProperty Name="Li_IloscTowaru" ColumnName="Li_IloscTowaru" />
+                <ScalarProperty Name="Li_Cena_Zakupu" ColumnName="Li_Cena_Zakupu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pracownicy">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Pracownicy">
+              <MappingFragment StoreEntitySet="Pracownicy">
+                <ScalarProperty Name="Pr_ID" ColumnName="Pr_ID" />
+                <ScalarProperty Name="Pr_Imie" ColumnName="Pr_Imie" />
+                <ScalarProperty Name="Pr_Nazwisko" ColumnName="Pr_Nazwisko" />
+                <ScalarProperty Name="Pr_AdresPracy" ColumnName="Pr_AdresPracy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Towar">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Towar">
+              <MappingFragment StoreEntitySet="Towar">
+                <ScalarProperty Name="ID" ColumnName="To_ID" />
+                <ScalarProperty Name="Ga_ID" ColumnName="Ga_ID" />
+                <ScalarProperty Name="Ty_ID" ColumnName="Ty_ID" />
+                <ScalarProperty Name="CenaAktualna" ColumnName="To_CenaAktualna" />
+                <ScalarProperty Name="IloscNaStanie" ColumnName="To_IloscNaStanie" />
+                <ScalarProperty Name="Nazwa" ColumnName="To_Nazwa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Typ">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Typ">
+              <MappingFragment StoreEntitySet="Typ">
+                <ScalarProperty Name="Ty_ID" ColumnName="Ty_ID" />
+                <ScalarProperty Name="Ty_Typ" ColumnName="Ty_Typ" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Utwor">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Utwor">
+              <MappingFragment StoreEntitySet="Utwor">
+                <ScalarProperty Name="Ut_ID" ColumnName="Ut_ID" />
+                <ScalarProperty Name="To_ID" ColumnName="To_ID" />
+                <ScalarProperty Name="Ut_Name" ColumnName="Ut_Name" />
+                <ScalarProperty Name="Ut_CzasUtworu" ColumnName="Ut_CzasUtworu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wykonawca">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Wykonawca">
+              <MappingFragment StoreEntitySet="Wykonawca">
+                <ScalarProperty Name="Wy_ID" ColumnName="Wy_ID" />
+                <ScalarProperty Name="Wy_Imie" ColumnName="Wy_Imie" />
+                <ScalarProperty Name="Wy_Nazwisko" ColumnName="Wy_Nazwisko" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zamowienia">
+            <EntityTypeMapping TypeName="SklepMuzycznyV2Model.Zamowienia">
+              <MappingFragment StoreEntitySet="Zamowienia">
+                <ScalarProperty Name="Za_ID" ColumnName="Za_ID" />
+                <ScalarProperty Name="Pr_ID" ColumnName="Pr_ID" />
+                <ScalarProperty Name="Kl_ID" ColumnName="Kl_ID" />
+                <ScalarProperty Name="Za_NaKiedy" ColumnName="Za_NaKiedy" />
+                <ScalarProperty Name="Za_KiedyKupione" ColumnName="Za_KiedyKupione" />
+                <ScalarProperty Name="Za_CzyZrealizowano" ColumnName="Za_CzyZrealizowano" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="TowarWykonawca" TypeName="SklepMuzycznyV2Model.TowarWykonawca" StoreEntitySet="TowarWykonawca">
+            <EndProperty Name="Towar">
+              <ScalarProperty Name="ID" ColumnName="To_ID" />
+            </EndProperty>
+            <EndProperty Name="Wykonawca">
+              <ScalarProperty Name="Wy_ID" ColumnName="Wy_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="Zad1" FunctionName="SklepMuzycznyV2Model.Store.Zad1">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad1_Result">
+                <ScalarProperty Name="ImieKlienta" ColumnName="ImieKlienta" />
+                <ScalarProperty Name="NazwiskoKlienta" ColumnName="NazwiskoKlienta" />
+                <ScalarProperty Name="NaKiedyZamowiono" ColumnName="NaKiedyZamowiono" />
+                <ScalarProperty Name="lacznyKoszt" ColumnName="lacznyKoszt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad10" FunctionName="SklepMuzycznyV2Model.Store.Zad10">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad10_Result">
+                <ScalarProperty Name="Za_NaKiedy" ColumnName="Za_NaKiedy" />
+                <ScalarProperty Name="IloscZlecen" ColumnName="IloscZlecen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad11" FunctionName="SklepMuzycznyV2Model.Store.Zad11">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad11_Result">
+                <ScalarProperty Name="Kl_Imie" ColumnName="Kl_Imie" />
+                <ScalarProperty Name="ileZamowien" ColumnName="ileZamowien" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad2" FunctionName="SklepMuzycznyV2Model.Store.Zad2" />
+          <FunctionImportMapping FunctionImportName="Zad3" FunctionName="SklepMuzycznyV2Model.Store.Zad3">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad3_Result">
+                <ScalarProperty Name="NazwaTowaru" ColumnName="NazwaTowaru" />
+                <ScalarProperty Name="IloscTowaruWSklepie" ColumnName="IloscTowaruWSklepie" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad4" FunctionName="SklepMuzycznyV2Model.Store.Zad4">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad4_Result">
+                <ScalarProperty Name="NazwaTowaru" ColumnName="NazwaTowaru" />
+                <ScalarProperty Name="CenaZaSztuke" ColumnName="CenaZaSztuke" />
+                <ScalarProperty Name="ZakupionychSztuk" ColumnName="ZakupionychSztuk" />
+                <ScalarProperty Name="Za_KiedyKupione" ColumnName="Za_KiedyKupione" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad5" FunctionName="SklepMuzycznyV2Model.Store.Zad5">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad5_Result">
+                <ScalarProperty Name="NazwaTowaru" ColumnName="NazwaTowaru" />
+                <ScalarProperty Name="brakującyTowar" ColumnName="brakującyTowar" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad6" FunctionName="SklepMuzycznyV2Model.Store.Zad6">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad6_Result">
+                <ScalarProperty Name="NazwaTowaru" ColumnName="NazwaTowaru" />
+                <ScalarProperty Name="To_IloscNaStanie" ColumnName="To_IloscNaStanie" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad7" FunctionName="SklepMuzycznyV2Model.Store.Zad7">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad7_Result">
+                <ScalarProperty Name="NazwaTowaru" ColumnName="NazwaTowaru" />
+                <ScalarProperty Name="CenaZaSztuke" ColumnName="CenaZaSztuke" />
+                <ScalarProperty Name="IloscSztuk" ColumnName="IloscSztuk" />
+                <ScalarProperty Name="Za_KiedyKupione" ColumnName="Za_KiedyKupione" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad8" FunctionName="SklepMuzycznyV2Model.Store.Zad8">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad8_Result">
+                <ScalarProperty Name="NazwaTowaru" ColumnName="NazwaTowaru" />
+                <ScalarProperty Name="IloscNaMagazynie" ColumnName="IloscNaMagazynie" />
+                <ScalarProperty Name="IloscZamowionychDoTejPory" ColumnName="IloscZamowionychDoTejPory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Zad9" FunctionName="SklepMuzycznyV2Model.Store.Zad9">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SklepMuzycznyV2Model.Zad9_Result">
+                <ScalarProperty Name="Pr_Imie" ColumnName="Pr_Imie" />
+                <ScalarProperty Name="IloscZlecen" ColumnName="IloscZlecen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

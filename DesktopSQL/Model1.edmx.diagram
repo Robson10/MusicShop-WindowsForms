@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="147706747c8947e19f83c20d3aeffdb3" Name="Diagram1">
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Gatunek" Width="1.5" PointX="0.75" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Klienci" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.ListaTowarow" Width="1.5" PointX="5.25" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Pracownicy" Width="1.5" PointX="0.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Towar" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Typ" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Utwor" Width="1.5" PointX="5.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Wykonawca" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SklepMuzycznyV2Model.Zamowienia" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.FK_TOWAR_TOWARGATU_GATUNEK" ManuallyRouted="false" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.FK_ZAMOWIEN_RELATIONS_KLIENCI" ManuallyRouted="false" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.FK_LISTATOW_LISTATOWA_TOWAR" ManuallyRouted="false" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.FK_LISTATOW_LISTATOWA_ZAMOWIEN" ManuallyRouted="false" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.FK_ZAMOWIEN_RELATIONS_PRACOWNI" ManuallyRouted="false" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.FK_TOWAR_TOWARTYP_TYP" ManuallyRouted="false" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.FK_UTWOR_TOWARUTWO_TOWAR" ManuallyRouted="false" />
+        <AssociationConnector Association="SklepMuzycznyV2Model.TowarWykonawca" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
